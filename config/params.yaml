@@ -1,0 +1,81 @@
+# ArduSimple simpleRTK3B Compass Driver Configuration
+# =============================================================================
+
+gnss_compass_driver:
+  ros__parameters:
+    # =========================================================================
+    # Serial Port Configuration
+    # =========================================================================
+    
+    # Serial port device path
+    # Common paths: /dev/ttyUSB0, /dev/ttyACM0, /dev/serial/by-id/...
+    port: "/dev/ttyUSB0"
+    
+    # Baud rate (must match receiver configuration)
+    # simpleRTK3B typically uses 115200 (default) or 460800
+    baudrate: 115200
+
+    # =========================================================================
+    # Frame Configuration
+    # =========================================================================
+    
+    # TF frame ID for published messages
+    frame_id: "gnss_link"
+
+    # =========================================================================
+    # Protocol Configuration
+    # =========================================================================
+    
+    # Enable UBX protocol parsing (recommended for full functionality)
+    # UBX provides: NAV-PVT, NAV-RELPOSNED (heading), NAV-DOP
+    use_ubx: true
+    
+    # Enable NMEA protocol parsing
+    # NMEA provides: GGA, RMC, VTG, GST, HDT, THS, ZDA
+    use_nmea: true
+    
+    # Enable UniCore protocol parsing (for Unicore-based receivers)
+    # UniCore provides: UNIHEADINGA (heading), BESTNAVA (position/velocity)
+    use_unicore: true
+
+    # =========================================================================
+    # Output Configuration
+    # =========================================================================
+    
+    # Publish heading topics (from dual antenna)
+    # Topics: gnss/heading/quaternion, gnss/heading/degrees
+    publish_heading: true
+    
+    # Publish velocity topic
+    # Topic: gnss/velocity (TwistStamped)
+    publish_velocity: true
+    
+    # Publish time reference topic
+    # Topic: gnss/time_reference
+    publish_time_ref: true
+    
+    # Publish diagnostics
+    # Topic: /diagnostics
+    publish_diagnostics: true
+
+    # =========================================================================
+    # Antenna Configuration
+    # =========================================================================
+    
+    # Baseline distance between dual antennas (meters)
+    # This is the physical distance between the two u-blox ANN-MB-00 antennas
+    # Accurate measurement is important for heading accuracy
+    antenna_baseline: 1.0
+
+    # =========================================================================
+    # Rate Configuration
+    # =========================================================================
+    
+    # Diagnostics publishing rate (Hz)
+    diagnostics_rate_hz: 1.0
+    
+    # GNSS output rate (Hz)
+    # Max 20 Hz for dual-antenna heading, 50 Hz for position only
+    # Higher rates require sufficient baud rate (115200 supports up to 20 Hz)
+    output_rate_hz: 20.0
+

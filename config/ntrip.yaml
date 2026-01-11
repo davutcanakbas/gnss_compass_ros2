@@ -1,0 +1,119 @@
+# NTRIP Client Configuration for RTK Corrections
+# =============================================================================
+#
+# This file configures the NTRIP client to receive RTK corrections
+# from an NTRIP caster (base station network).
+#
+# FINDING A BASE STATION:
+#   Use the included script to find nearby free RTK2GO stations:
+#   
+#   ./scripts/find_rtk2go_stations.sh <your_lat> <your_lon>
+#   
+#   Example: ./scripts/find_rtk2go_stations.sh 52.52 13.40  # Berlin
+#
+# RTK REQUIREMENTS:
+#   - Base station should be within 35-50 km for reliable RTK
+#   - Clear sky view required for both rover and base
+#   - Same GNSS constellations should be tracked
+#
+# =============================================================================
+
+ntrip_client:
+  ros__parameters:
+    # =========================================================================
+    # NTRIP Caster Configuration
+    # =========================================================================
+    
+    # NTRIP caster hostname
+    # Free options:
+    #   - rtk2go.com (free, community-run)
+    #   - caster.centipede.fr (free, Europe-focused)
+    # Paid options (examples):
+    #   - rtk.tusaga-aktif.gov.tr (Turkey official CORS)
+    #   - your-provider.com
+    host: "rtk2go.com"
+    
+    # NTRIP caster port (usually 2101)
+    port: 2101
+    
+    # Mountpoint name (base station identifier)
+    # Find your nearest station using: ./scripts/find_rtk2go_stations.sh
+    # Leave empty and check logs for available mountpoints
+    mountpoint: ""
+    
+    # Authentication (if required)
+    # For RTK2GO: use your email address as username, password can be empty
+    # For paid services: use your account credentials
+    username: ""
+    password: ""
+    
+    # =========================================================================
+    # ROS2 Topic Configuration
+    # =========================================================================
+    
+    # Topic to publish RTCM data (must match driver's rtcm_topic parameter)
+    rtcm_topic: "rtcm"
+    
+    # =========================================================================
+    # Connection Settings
+    # =========================================================================
+    
+    # Delay between reconnection attempts (seconds)
+    reconnect_delay_sec: 5.0
+    
+    # =========================================================================
+    # GGA Position Reporting (for VRS/Network RTK)
+    # =========================================================================
+    
+    # Send GGA position to caster (required for VRS/Network RTK services)
+    # VRS services create a virtual base station at your location
+    send_gga: true
+    
+    # How often to send GGA updates (seconds)
+    gga_update_rate_sec: 10.0
+    
+    # Initial position for GGA (used before GNSS fix is available)
+    # Set to your approximate location, or leave as 0.0 to skip initial GGA
+    # These are overridden once the driver provides actual position
+    latitude: 0.0
+    longitude: 0.0
+    altitude: 0.0
+
+# =============================================================================
+# EXAMPLE CONFIGURATIONS
+# =============================================================================
+#
+# RTK2GO (Free, worldwide):
+# -------------------------
+#   host: "rtk2go.com"
+#   port: 2101
+#   mountpoint: "YourNearestStation"  # Find using the script
+#   username: "your.email@example.com"
+#   password: ""
+#
+# Centipede RTK (Free, Europe):
+# -----------------------------
+#   host: "caster.centipede.fr"
+#   port: 2101
+#   mountpoint: "CT"  # Check their map for stations
+#   username: "centipede"
+#   password: "centipede"
+#
+# TUSAGA-Aktif (Turkey, paid):
+# ----------------------------
+#   host: "rtk.tusaga-aktif.gov.tr"
+#   port: 2101
+#   mountpoint: "VRS_RTCM32"  # or nearest station
+#   username: "YOUR_USERNAME"
+#   password: "YOUR_PASSWORD"
+#
+# Emlid Caster (if you have your own base):
+# -----------------------------------------
+#   host: "caster.emlid.com"
+#   port: 2101
+#   mountpoint: "YOUR_MOUNT"
+#   username: ""
+#   password: ""
+#
+# =============================================================================
+
